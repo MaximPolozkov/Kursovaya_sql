@@ -16,6 +16,7 @@ class EntryIntoCompanies:
             raise
 
     def insert_companies(self):
+        """Заносит данные в таблицу компании"""
         conn = None
         try:
             host = self.config['postgresql']['host']

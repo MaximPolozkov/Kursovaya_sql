@@ -14,6 +14,7 @@ class CreateTableVacancies:
             raise
 
     def create_table_vacancies(self, name_table: str = 'vacancies'):
+        """Создает таблицу вакансии в БД"""
         conn = None
         try:
             host = self.config['postgresql']['host']

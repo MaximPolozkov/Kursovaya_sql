@@ -16,6 +16,7 @@ class EntryIntoVacancies:
             raise
 
     def insert_vacancies(self, get_vacancies: str):
+        """Заносит данные в таблицу вакансии"""
         conn = None
         try:
             host = self.config['postgresql']['host']

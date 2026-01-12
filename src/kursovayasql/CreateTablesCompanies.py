@@ -14,6 +14,7 @@ class CreateTableCompanies:
             raise
 
     def create_table_companies(self, name_table: str = 'companies'):
+        """Создает таблице компании в БД"""
         conn = None
         try:
             host = self.config['postgresql']['host']

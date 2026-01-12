@@ -6,6 +6,7 @@ class ApiCompanies:
 
     @staticmethod
     def get_companies():
+        """Получает компаеие через API"""
         BASE_URL = 'https://api.hh.ru/'
         companies = requests.get(BASE_URL + 'employers').json()['items']
         return companies

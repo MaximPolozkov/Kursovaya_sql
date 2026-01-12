@@ -14,6 +14,7 @@ class SelectCompanies:
             raise
 
     def select_companies(self):
+        """Делает запрос в таблицу компании"""
         conn = None
         try:
             host = self.config['postgresql']['host']

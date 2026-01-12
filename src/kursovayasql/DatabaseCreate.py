@@ -13,6 +13,7 @@ class DatabaseCreate:
             raise
 
     def create_database(self, database_name):
+        """Создает БД"""
         conn = None
         try:
             host = self.config['postgresql']['host']
