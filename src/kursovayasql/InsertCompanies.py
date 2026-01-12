@@ -15,8 +15,7 @@ class EntryIntoCompanies:
             print(f"Ошибка при чтении файла конфигурации: {e}")
             raise
 
-    def into_companies(self):
-        r = []
+    def insert_companies(self):
         conn = None
         try:
             host = self.config['postgresql']['host']
@@ -30,15 +29,13 @@ class EntryIntoCompanies:
             cursor = conn.cursor()
 
             api_companies = ApiCompanies().get_companies()
-            #r.append(api_companies)
 
             for company in api_companies:
-                print(company)
-                #hh_id = (company['id'])
-                #print(hh_id)
-                #cursor.execute(f"""
-                #INSERT INTO companies (id, hh_id, name) VALUES(%s, %s, %s) ON CONFLICT (hh_id) DO NOTHING
-                #""", (hh_id, compani['name']))
+                hh_id = company.get('id')
+                name = company.get('name')
+                cursor.execute(f"""
+                INSERT INTO companies (hh_id, name) VALUES( %s, %s)
+                """, (hh_id, name))
 
             conn.commit()
 
@@ -48,12 +45,12 @@ class EntryIntoCompanies:
             print(f" Записи не внесены.")
         except Exception as e:
             print(f"Ошибка при записи в таблицу: {e}")
-        #finally:
-            #if conn:#
-                #cursor.close()
-                #conn.close()
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
 
 
 if __name__ == "__main__":
     pol = EntryIntoCompanies()
-    pol.into_companies()
+    pol.insert_companies()
