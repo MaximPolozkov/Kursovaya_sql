@@ -1,3 +1,5 @@
+import os.path
+
 import psycopg2
 import configparser
 
@@ -6,13 +8,15 @@ class DatabaseCreate:
     
     def __init__(self, config_file='datebase.ini'):
         self.config = configparser.ConfigParser()
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        config_path = os.path.join(script_dir, config_file)
         try:
-            self.config.read(config_file)
+            self.config.read(config_path)
         except Exception as e:
             print(f"Ошибка при чтении файла конфигурации: {e}")
             raise
 
-    def create_database(self, database_name):
+    def create_database(self, database_name: str = 'hh_sql'):
         """Создает БД"""
         conn = None
         try:
@@ -44,4 +48,4 @@ class DatabaseCreate:
 
 if __name__ == "__main__":
     create = DatabaseCreate()
-    create.create_database(database_name='hh_sql')
+    create.create_database()

@@ -1,16 +1,19 @@
 import configparser
+import os
 
 import psycopg2
 
-from ApiCompanies import ApiCompanies
+from src.kursovayasql.ApiCompanies import ApiCompanies
 
 
 class EntryIntoCompanies:
 
     def __init__(self, config_file='datebase.ini'):
         self.config = configparser.ConfigParser()
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        config_path = os.path.join(script_dir, config_file)
         try:
-            self.config.read(config_file)
+            self.config.read(config_path)
         except Exception as e:
             print(f"Ошибка при чтении файла конфигурации: {e}")
             raise
@@ -36,6 +39,7 @@ class EntryIntoCompanies:
                 name = company.get('name')
                 cursor.execute(f"""
                 INSERT INTO companies (hh_id, name) VALUES( %s, %s)
+                ON CONFLICT (hh_id) DO NOTHING;
                 """, (hh_id, name))
 
             conn.commit()

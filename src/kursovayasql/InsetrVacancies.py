@@ -1,16 +1,19 @@
 import configparser
+import os
 
 import psycopg2
 
-from GetVacancies import GetVacancies
+from src.kursovayasql.GetVacancies import GetVacancies
 
 
 class EntryIntoVacancies:
 
     def __init__(self, config_file='datebase.ini'):
         self.config = configparser.ConfigParser()
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        config_path = os.path.join(script_dir, config_file)
         try:
-            self.config.read(config_file)
+            self.config.read(config_path)
         except Exception as e:
             print(f"Ошибка при чтении файла конфигурации: {e}")
             raise
@@ -50,7 +53,8 @@ class EntryIntoVacancies:
                         if hh_id and name:
                             cursor.execute(f"""
                             INSERT INTO vacancies( company_id, hh_id, name, salary_from, salary_to)
-                            VALUES( %s, %s, %s, %s, %s);
+                            VALUES( %s, %s, %s, %s, %s)
+                            ON CONFLICT (hh_id) DO NOTHING;
                             """, (company_id, hh_id, name, salary_f, salary_t))
 
                     conn.commit()
